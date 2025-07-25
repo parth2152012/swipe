@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Multi-Page Swipe/Scroll</title>
+    <title>Multi-Page Business Verticals</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Anime.js CDN -->
@@ -29,111 +29,250 @@
             /* No transition here, Anime.js handles it */
             touch-action: none; /* Prevent browser default touch actions like pull-to-refresh */
             transition: none; /* Ensure no default CSS transitions interfere with Anime.js */
+            padding-top: 60px; /* Adjusted space for the smaller fixed header */
+            box-sizing: border-box; /* Include padding in height calculation */
         }
-        /* Page specific styling with z-index for stacking */
-        .page-one { background-color: #f0f9ff; z-index: 50; } /* Sky blue */
-        .page-two { background-color: #fff7ed; z-index: 40; } /* Light orange/peach */
-        .page-three { background-color: #ecfdf5; z-index: 30; } /* Light emerald */
-        .page-four { background-color: #f5f3ff; z-index: 20; } /* Light purple */
-        .page-five { background-color: #fdf2f8; z-index: 10; } /* Light pink */
 
-        /* Styles for navigation buttons */
+        /* Page specific styling with z-index for stacking and distinct colors */
+        .page-welcome { background-color: #f0f9ff; z-index: 80; } /* Sky blue */
+        .page-airports { background-color: #fff7ed; z-index: 70; } /* Light orange/peach */
+        .page-energy { background-color: #ecfdf5; z-index: 60; } /* Light emerald */
+        .page-transportation { background-color: #f5f3ff; z-index: 50; } /* Light purple */
+        .page-urban-infrastructure { background-color: #fdf2f8; z-index: 40; } /* Light pink */
+        .page-sports { background-color: #e0f2fe; z-index: 30; } /* Lighter blue */
+        .page-foundation { background-color: #fefce8; z-index: 20; } /* Light yellow */
+        .page-investor-relations { background-color: #ffe4e6; z-index: 10; } /* Rosy pink */
+
+
+        /* Styles for main navigation buttons (Explore) */
         .nav-button {
             @apply px-8 py-4 font-bold text-xl rounded-full shadow-lg
                    transition duration-300 ease-in-out transform hover:scale-105
                    focus:outline-none focus:ring-4;
         }
-        .next-button {
-            @apply bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-300;
+        .explore-button {
+            @apply bg-indigo-500 text-white hover:bg-indigo-600 focus:ring-indigo-300;
         }
-        .prev-button {
-            @apply bg-gray-400 text-gray-800 hover:bg-gray-500 focus:ring-gray-300;
+
+        /* Styles for pagination dots */
+        .pagination-dots {
+            position: fixed;
+            bottom: 20px; /* Position at the bottom */
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px; /* Space between dots */
+            z-index: 100; /* Ensure dots are above pages */
         }
-        .disabled-button {
-            @apply opacity-50 cursor-not-allowed;
+        .dot {
+            width: 12px;
+            height: 12px;
+            background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent white */
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            border: 1px solid rgba(0, 0, 0, 0.2); /* Subtle border */
+        }
+        .dot.active {
+            background-color: #ffffff; /* Solid white for active dot */
+            transform: scale(1.2); /* Slightly larger */
+            border: 1px solid rgba(0, 0, 0, 0.4);
+        }
+        .dot:hover:not(.active) {
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Fixed Top Navigation Bar */
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: transparent; /* Removed background */
+            padding: 5px 0; /* Reduced padding */
+            box-shadow: none; /* Removed box shadow */
+            z-index: 100; /* Ensure it's on top */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap; /* Allow wrapping on smaller screens */
+            gap: 20px; /* Increased space between buttons */
+        }
+        .top-nav-button {
+            @apply flex flex-col items-center justify-center p-1 rounded-md cursor-pointer
+                   transition-all duration-200 ease-in-out;
+            width: 60px; /* Explicit width for uniform size */
+            height: 45px; /* Explicit height for uniform size */
+            
+            /* GMR-style solid button styling */
+            border: 1px solid transparent; /* No visible border by default */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Subtle shadow */
+        }
+        /* Dynamic background colors will be set via JavaScript */
+        .top-nav-button svg {
+            @apply w-5 h-5 mb-0.5; /* Smaller icons */
+            fill: #ffffff; /* Solid white for icons */
+            transition: fill 0.2s ease;
+        }
+        .top-nav-button span {
+            @apply text-white text-xs font-medium text-center; /* Smaller text */
+            opacity: 1; /* Always fully opaque */
+            transition: opacity 0.2s ease;
+        }
+        .top-nav-button:hover {
+            filter: none; /* Removed filter */
+            background-color: rgba(255, 255, 255, 0.1); /* Subtle white overlay on hover */
+            transform: none; /* No lift on hover */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3); /* More pronounced shadow on hover */
+        }
+        .top-nav-button.active {
+            filter: none; /* Removed filter */
+            background-color: rgba(255, 255, 255, 0.2); /* More visible white overlay for active */
+            border-color: #ffffff; /* White border for active state */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Consistent shadow */
+            transform: none; /* No transform on active */
+        }
+        .top-nav-button.active svg {
+            fill: #ffffff; /* Solid white for active icon */
+        }
+        .top-nav-button.active span {
+            opacity: 1; /* Solid white for active text */
         }
     </style>
 </head>
 <body class="overflow-hidden">
 
-    <!-- Page One -->
-    <div id="pageOne" class="page page-one p-8 md:p-12 lg:p-16 rounded-lg shadow-xl text-center">
+    <!-- Fixed Top Navigation Bar -->
+    <div class="top-nav" id="topNavBar">
+        <div class="top-nav-button" data-page-index="0" data-bg-color="#334155"> <!-- Slate 700 -->
+            <svg viewBox="0 0 24 24"><path d="M12 2L2 7v10l10 5 10-5V7L12 2zm0 15.93l-6-3.35V8.07l6-3.35 6 3.35v6.51l-6 3.35z"/></svg>
+            <span>Welcome</span>
+        </div>
+        <div class="top-nav-button" data-page-index="1" data-bg-color="#2563eb"> <!-- Blue 600 -->
+            <svg viewBox="0 0 24 24"><path d="M21 16v-2h-3v-2h3V8h-3V6h3V4h-3V2h-2v2H7V2H5v2H2v2h3v2H2v2h3v2H2v2h3v2h2v-2h10v2h2v-2h3v-2h-3v-2h3zm-5 0H8V8h8v8z"/></svg>
+            <span>Airports</span>
+        </div>
+        <div class="top-nav-button" data-page-index="2" data-bg-color="#dc2626"> <!-- Red 600 -->
+            <svg viewBox="0 0 24 24"><path d="M13 18v-4h-2v4H8l4 5 4-5h-3zm-1-16L8 6h3v4h2V6h3l-4-4z"/></svg>
+            <span>Energy</span>
+        </div>
+        <div class="top-nav-button" data-page-index="3" data-bg-color="#f59e0b"> <!-- Amber 500 -->
+            <svg viewBox="0 0 24 24"><path d="M22 10v4h-2V9h-2V7h-2V5h-2V3h-2V1h-2v2H8v2H6v2H4v2H2v5h2v-2h2v-2h2v-2h2v-2h2v2h2v2h2v2h2v-2h2v-2h2V10h-2zm-10 0v2h2v-2h-2z"/></svg>
+            <span>Transport</span>
+        </div>
+        <div class="top-nav-button" data-page-index="4" data-bg-color="#c2410c"> <!-- Orange 700 -->
+            <svg viewBox="0 0 24 24"><path d="M19 11h-1V3h-2v8h-2V3h-2v8H9V3H7v8H6V3H4v8H3V1h16v10zm-6 2h-2v8h2v-8zm4 0h-2v8h2v-8zm-8 0H7v8h2v-8z"/></svg>
+            <span>Urban Infra</span>
+        </div>
+        <div class="top-nav-button" data-page-index="5" data-bg-color="#e11d48"> <!-- Rose 600 -->
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15H9v-2h2v2zm0-4H9v-2h2v2zm0-4H9V7h2v2zm4 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V7h2v2z"/></svg>
+            <span>Sports</span>
+        </div>
+        <div class="top-nav-button" data-page-index="6" data-bg-color="#16a34a"> <!-- Green 600 -->
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zM9.5 13.5c0 .83-.67 1.5-1.5 1.5s-1.5-.67-1.5-1.5S7.17 12 8 12s1.5.67 1.5 1.5zm7 0c0 .83-.67 1.5-1.5 1.5s-1.5-.67-1.5-1.5S14.17 12 15 12s1.5.67 1.5 1.5zM12 6c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2h2c0-2.21-1.79-4-4-4z"/></svg>
+            <span>Foundation</span>
+        </div>
+        <div class="top-nav-button" data-page-index="7" data-bg-color="#6d28d9"> <!-- Purple 700 -->
+            <svg viewBox="0 0 24 24"><path d="M5 20h14v-2H5v2zm0-10h4v6H5v-6zm10 0h4v6h-4v-6zm-5-6h4v16h-4V4z"/></svg>
+            <span>Investor R.</span>
+        </div>
+    </div>
+
+    <!-- Page 0: Welcome -->
+    <div id="pageWelcome" class="page page-welcome p-8 md:p-12 lg:p-16 rounded-lg shadow-xl text-center">
         <h1 class="text-5xl md:text-6xl lg:text-7xl font-extrabold text-blue-800 mb-8">
-            Page 1: Welcome!
+            Welcome to Our Group!
         </h1>
         <p class="text-lg md:text-xl lg:text-2xl text-blue-600 mb-12 max-w-2xl mx-auto">
-            This is the first page. Scroll up (PC) or swipe up (Mobile) to go to the next page, or click the button below.
+            Discover our diverse business verticals by scrolling, swiping, or using the navigation above.
         </p>
-        <button class="nav-button next-button" data-direction="next">
-            Next Page
-        </button>
+        <div class="flex flex-col sm:flex-row gap-4">
+            <button class="nav-button explore-button" data-direction="next">
+                Explore Verticals
+            </button>
+        </div>
     </div>
 
-    <!-- Page Two -->
-    <div id="pageTwo" class="page page-two p-8 md:p-12 lg:p-16 rounded-lg shadow-xl text-center">
+    <!-- Page 1: Airports -->
+    <div id="pageAirports" class="page page-airports p-8 md:p-12 lg:p-16 rounded-lg shadow-xl text-center">
         <h2 class="text-5xl md:text-6xl lg:text-7xl font-extrabold text-orange-800 mb-8">
-            Page 2: Explore More!
+            Airports Vertical
         </h2>
         <p class="text-lg md:text-xl lg:text-2xl text-orange-600 mb-12 max-w-2xl mx-auto">
-            You've reached the second page. Discover new content here. Scroll down (PC) or swipe down (Mobile) to go back.
+            We develop and operate world-class airports, connecting cities and fostering economic growth.
         </p>
-        <div class="flex flex-col sm:flex-row gap-4">
-            <button class="nav-button prev-button" data-direction="prev">
-                Previous Page
-            </button>
-            <button class="nav-button next-button" data-direction="next">
-                Next Page
-            </button>
-        </div>
+        <img src="https://placehold.co/600x300/FFD700/000000?text=Airport+Image" alt="Airport" class="rounded-xl shadow-lg mb-6 max-w-full h-auto">
     </div>
 
-    <!-- Page Three -->
-    <div id="pageThree" class="page page-three p-8 md:p-12 lg:p-16 rounded-lg shadow-xl text-center">
+    <!-- Page 2: Energy -->
+    <div id="pageEnergy" class="page page-energy p-8 md:p-12 lg:p-16 rounded-lg shadow-xl text-center">
         <h2 class="text-5xl md:text-6xl lg:text-7xl font-extrabold text-emerald-800 mb-8">
-            Page 3: Deep Dive
+            Energy Solutions
         </h2>
         <p class="text-lg md:text-xl lg:text-2xl text-emerald-600 mb-12 max-w-2xl mx-auto">
-            This is the third page, packed with detailed information. Keep scrolling!
+            Pioneering sustainable and efficient energy solutions for a brighter future.
         </p>
-        <div class="flex flex-col sm:flex-row gap-4">
-            <button class="nav-button prev-button" data-direction="prev">
-                Previous Page
-            </button>
-            <button class="nav-button next-button" data-direction="next">
-                Next Page
-            </button>
-        </div>
+        <img src="https://placehold.co/600x300/32CD32/FFFFFF?text=Energy+Image" alt="Energy" class="rounded-xl shadow-lg mb-6 max-w-full h-auto">
     </div>
 
-    <!-- Page Four -->
-    <div id="pageFour" class="page page-four p-8 md:p-12 lg:p-16 rounded-lg shadow-xl text-center">
+    <!-- Page 3: Transportation -->
+    <div id="pageTransportation" class="page page-transportation p-8 md:p-12 lg:p-16 rounded-lg shadow-xl text-center">
         <h2 class="text-5xl md:text-6xl lg:text-7xl font-extrabold text-purple-800 mb-8">
-            Page 4: Our Services
+            Transportation & Logistics
         </h2>
         <p class="text-lg md:text-xl lg:text-2xl text-purple-600 mb-12 max-w-2xl mx-auto">
-            Learn about the services we offer on this page. Almost there!
+            Building robust road networks and integrated logistics for seamless connectivity.
         </p>
-        <div class="flex flex-col sm:flex-row gap-4">
-            <button class="nav-button prev-button" data-direction="prev">
-                Previous Page
-            </button>
-            <button class="nav-button next-button" data-direction="next">
-                Next Page
-            </button>
-        </div>
+        <img src="https://placehold.co/600x300/8A2BE2/FFFFFF?text=Transportation+Image" alt="Transportation" class="rounded-xl shadow-lg mb-6 max-w-full h-auto">
     </div>
 
-    <!-- Page Five -->
-    <div id="pageFive" class="page page-five p-8 md:p-12 lg:p-16 rounded-lg shadow-xl text-center">
+    <!-- Page 4: Urban Infrastructure -->
+    <div id="pageUrbanInfrastructure" class="page page-urban-infrastructure p-8 md:p-12 lg:p-16 rounded-lg shadow-xl text-center">
         <h2 class="text-5xl md:text-6xl lg:text-7xl font-extrabold text-pink-800 mb-8">
-            Page 5: Contact Us!
+            Urban Infrastructure
         </h2>
         <p class="text-lg md:text-xl lg:text-2xl text-pink-600 mb-12 max-w-2xl mx-auto">
-            You've reached the end! Feel free to reach out to us. Scroll down to go back to the beginning.
+            Creating smart, sustainable, and livable urban spaces for communities.
         </p>
-        <button class="nav-button prev-button" data-direction="prev">
-            Previous Page
-        </button>
+        <img src="https://placehold.co/600x300/FF69B4/FFFFFF?text=Urban+Infra+Image" alt="Urban Infrastructure" class="rounded-xl shadow-lg mb-6 max-w-full h-auto">
+    </div>
+
+    <!-- Page 5: Sports -->
+    <div id="pageSports" class="page page-sports p-8 md:p-12 lg:p-16 rounded-lg shadow-xl text-center">
+        <h2 class="text-5xl md:text-6xl lg:text-7xl font-extrabold text-blue-700 mb-8">
+            Sports & Entertainment
+        </h2>
+        <p class="text-lg md:text-xl lg:text-2xl text-blue-500 mb-12 max-w-2xl mx-auto">
+            Developing world-class sports facilities and promoting athletic excellence.
+        </p>
+        <img src="https://placehold.co/600x300/4682B4/FFFFFF?text=Sports+Image" alt="Sports" class="rounded-xl shadow-lg mb-6 max-w-full h-auto">
+    </div>
+
+    <!-- Page 6: Foundation -->
+    <div id="pageFoundation" class="page page-foundation p-8 md:p-12 lg:p-16 rounded-lg shadow-xl text-center">
+        <h2 class="text-5xl md:text-6xl lg:text-7xl font-extrabold text-yellow-700 mb-8">
+            Our Foundation
+        </h2>
+        <p class="text-lg md:text-xl lg:text-2xl text-yellow-600 mb-12 max-w-2xl mx-auto">
+            Committed to social responsibility and community development initiatives.
+        </p>
+        <img src="https://placehold.co/600x300/DAA520/FFFFFF?text=Foundation+Image" alt="Foundation" class="rounded-xl shadow-lg mb-6 max-w-full h-auto">
+    </div>
+
+    <!-- Page 7: Investor Relations -->
+    <div id="pageInvestorRelations" class="page page-investor-relations p-8 md:p-12 lg:p-16 rounded-lg shadow-xl text-center">
+        <h2 class="text-5xl md:text-6xl lg:text-7xl font-extrabold text-red-700 mb-8">
+            Investor Relations
+        </h2>
+        <p class="text-lg md:text-xl lg:text-2xl text-red-500 mb-12 max-w-2xl mx-auto">
+            Providing transparent and timely information to our valued investors.
+        </p>
+        <img src="https://placehold.co/600x300/DC143C/FFFFFF?text=Investor+Image" alt="Investor Relations" class="rounded-xl shadow-lg mb-6 max-w-full h-auto">
+    </div>
+
+    <!-- Pagination Dots Container -->
+    <div class="pagination-dots" id="paginationDots">
+        <!-- Dots will be dynamically added here by JavaScript -->
     </div>
 
     <script>
@@ -145,27 +284,43 @@
         const swipeThreshold = 50; // Minimum vertical pixel movement for swipe/scroll detection
         let startY = 0; // For touch events
 
-        // Function to update button states (enabled/disabled)
-        function updateButtonStates() {
-            const currentButtons = pages[currentPageIndex].querySelectorAll('.nav-button');
-            currentButtons.forEach(button => {
-                const direction = button.dataset.direction;
-                if (direction === 'prev') {
-                    if (currentPageIndex === 0) {
-                        button.classList.add('disabled-button');
-                        button.disabled = true;
-                    } else {
-                        button.classList.remove('disabled-button');
-                        button.disabled = false;
-                    }
-                } else if (direction === 'next') {
-                    if (currentPageIndex === pages.length - 1) {
-                        button.classList.add('disabled-button');
-                        button.disabled = true;
-                    } else {
-                        button.classList.remove('disabled-button');
-                        button.disabled = false;
-                    }
+        const paginationDotsContainer = document.getElementById('paginationDots');
+        const topNavButtons = document.querySelectorAll('.top-nav-button');
+
+        // Function to create and append pagination dots
+        function createPaginationDots() {
+            paginationDotsContainer.innerHTML = ''; // Clear existing dots
+            pages.forEach((_, index) => {
+                const dot = document.createElement('div');
+                dot.classList.add('dot');
+                dot.dataset.pageIndex = index; // Store the page index in a data attribute
+                dot.addEventListener('click', () => {
+                    goToPage(index); // Navigate to the clicked page
+                });
+                paginationDotsContainer.appendChild(dot);
+            });
+            updatePaginationDots(); // Set initial active dot
+        }
+
+        // Function to update the active state of pagination dots
+        function updatePaginationDots() {
+            const dots = paginationDotsContainer.querySelectorAll('.dot');
+            dots.forEach((dot, index) => {
+                if (index === currentPageIndex) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+        }
+
+        // Function to update the active state of top navigation buttons
+        function updateTopNavButtons() {
+            topNavButtons.forEach((button, index) => {
+                if (index === currentPageIndex) {
+                    button.classList.add('active');
+                } else {
+                    button.classList.remove('active');
                 }
             });
         }
@@ -205,12 +360,13 @@
                 complete: () => {
                     currentPageIndex = newPageIndex; // Update current page index after animation completes
                     isAnimating = false; // Reset animation flag
-                    updateButtonStates(); // Update button states after page change
+                    updatePaginationDots(); // Update active dot
+                    updateTopNavButtons(); // Update active top nav button
                 }
             });
         }
 
-        // Event listener for navigation buttons (delegated to body for efficiency)
+        // Event listener for navigation buttons (Explore)
         document.body.addEventListener('click', (e) => {
             const button = e.target.closest('.nav-button');
             if (button && !button.disabled) {
@@ -221,6 +377,14 @@
                     goToPage(currentPageIndex - 1);
                 }
             }
+        });
+
+        // Event listener for top navigation buttons
+        topNavButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const targetPageIndex = parseInt(button.dataset.pageIndex);
+                goToPage(targetPageIndex);
+            });
         });
 
         // Touch Event Listeners for mobile devices (swipe)
@@ -257,7 +421,7 @@
                 return;
             }
 
-            // Prevent default scroll behavior immediately to esure smooth page transition
+            // Prevent default scroll behavior immediately to ensure smooth page transition
             e.preventDefault();
 
             if (e.deltaY > swipeThreshold) {
@@ -278,7 +442,16 @@
                     page.style.transform = 'translateY(100%)'; // All other pages start off-screen
                 }
             });
-            updateButtonStates(); // Set initial button states
+
+            // Set initial background colors for top nav buttons
+            topNavButtons.forEach(button => {
+                if (button.dataset.bgColor) {
+                    button.style.backgroundColor = button.dataset.bgColor;
+                }
+            });
+
+            createPaginationDots(); // Create dots on load
+            updateTopNavButtons(); // Set initial active top nav button
         });
     </script>
 </body>
