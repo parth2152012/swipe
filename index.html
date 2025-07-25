@@ -29,8 +29,20 @@
             /* No transition here, Anime.js handles it */
             touch-action: none; /* Prevent browser default touch actions like pull-to-refresh */
             transition: none; /* Ensure no default CSS transitions interfere with Anime.js */
-            padding-top: 60px; /* Adjusted space for the smaller fixed header */
+            
+            /* Responsive padding for header/footer */
+            padding-top: 5px; /* Minimal top padding for mobile (nav at bottom) */
+            padding-bottom: 60px; /* Space for bottom nav on mobile */
+
             box-sizing: border-box; /* Include padding in height calculation */
+        }
+
+        /* Adjust page padding for medium screens and up (nav at top) */
+        @media (min-width: 768px) { /* md breakpoint */
+            .page {
+                padding-top: 60px;
+                padding-bottom: 0;
+            }
         }
 
         /* Page specific styling with z-index for stacking and distinct colors */
@@ -82,38 +94,74 @@
             background-color: rgba(255, 255, 255, 0.8);
         }
 
-        /* Fixed Top Navigation Bar */
+        /* Fixed Top Navigation Bar - Responsive Adjustments */
         .top-nav {
             position: fixed;
-            top: 0;
             left: 0;
             width: 100%;
-            background-color: transparent; /* Removed background */
-            padding: 5px 0; /* Reduced padding */
-            box-shadow: none; /* Removed box shadow */
+            background-color: transparent; /* Transparent background */
+            box-shadow: none; /* No box shadow */
             z-index: 100; /* Ensure it's on top */
             display: flex;
             justify-content: center;
             align-items: center;
             flex-wrap: wrap; /* Allow wrapping on smaller screens */
-            gap: 20px; /* Increased space between buttons */
-        }
-        .top-nav-button {
-            @apply flex flex-col items-center justify-center p-1 rounded-md cursor-pointer
-                   transition-all duration-200 ease-in-out;
-            width: 60px; /* Explicit width for uniform size */
-            height: 45px; /* Explicit height for uniform size */
             
+            /* Mobile styles (default) */
+            bottom: 0; /* Position at bottom for mobile */
+            top: auto; /* Override top:0 for mobile */
+            padding: 5px 0; /* Smaller padding for mobile */
+            gap: 5px; /* Smaller gap for mobile */
+        }
+
+        /* Desktop/Tablet styles (md breakpoint and up) */
+        @media (min-width: 768px) { /* md breakpoint */
+            .top-nav {
+                top: 0; /* Position at top for desktop */
+                bottom: auto; /* Override bottom:0 for desktop */
+                padding: 5px 0; /* Restore desktop padding */
+                gap: 20px; /* Restore larger gap for desktop */
+            }
+        }
+
+        .top-nav-button {
+            @apply flex flex-col items-center justify-center rounded-md cursor-pointer
+                   transition-all duration-200 ease-in-out;
+            
+            /* Mobile button size and padding (default) */
+            width: 45px;
+            height: 35px;
+            padding: 0.5px; /* Very small padding for mobile */
+
             /* GMR-style solid button styling */
             border: 1px solid transparent; /* No visible border by default */
             box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Subtle shadow */
         }
+
+        /* Desktop/Tablet button size and padding (md breakpoint and up) */
+        @media (min-width: 768px) { /* md breakpoint */
+            .top-nav-button {
+                width: 60px;
+                height: 45px;
+                padding: 1px; /* Restore desktop padding */
+            }
+        }
+
         /* Dynamic background colors will be set via JavaScript */
         .top-nav-button svg {
-            @apply w-5 h-5 mb-0.5; /* Smaller icons */
+            /* Mobile icon size (default) */
+            @apply w-4 h-4 mb-0.5;
             fill: #ffffff; /* Solid white for icons */
             transition: fill 0.2s ease;
         }
+
+        /* Desktop/Tablet icon size (md breakpoint and up) */
+        @media (min-width: 768px) { /* md breakpoint */
+            .top-nav-button svg {
+                @apply w-5 h-5;
+            }
+        }
+
         .top-nav-button span {
             @apply text-white text-xs font-medium text-center; /* Smaller text */
             opacity: 1; /* Always fully opaque */
