@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Page Swipe/Scroll</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Anime.js CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <style>
+        /* Custom styles for full height sections and smooth scrolling */
+        html, body {
+            height: 100%;
+            margin: 0;
+            overflow: hidden; /* Prevent default browser scrolling */
+            font-family: 'Inter', sans-serif; /* Using Inter font */
+        }
+        .page {
+            width: 100%;
+            height: 100vh; /* Full viewport height */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: absolute; /* Position pages absolutely for overlay effect */
+            top: 0;
+            left: 0;
+            /* No transition here, Anime.js handles it */
+            touch-action: none; /* Prevent browser default touch actions like pull-to-refresh */
+            transition: none; /* Ensure no default CSS transitions interfere with Anime.js */
+        }
+        /* Page specific styling with z-index for stacking */
+        .page-one { background-color: #f0f9ff; z-index: 50; } /* Sky blue */
+        .page-two { background-color: #fff7ed; z-index: 40; } /* Light orange/peach */
+        .page-three { background-color: #ecfdf5; z-index: 30; } /* Light emerald */
+        .page-four { background-color: #f5f3ff; z-index: 20; } /* Light purple */
+        .page-five { background-color: #fdf2f8; z-index: 10; } /* Light pink */
+
+        /* Styles for navigation buttons */
+        .nav-button {
+            @apply px-8 py-4 font-bold text-xl rounded-full shadow-lg
+                   transition duration-300 ease-in-out transform hover:scale-105
+                   focus:outline-none focus:ring-4;
+        }
+        .next-button {
+            @apply bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-300;
+        }
+        .prev-button {
+            @apply bg-gray-400 text-gray-800 hover:bg-gray-500 focus:ring-gray-300;
+        }
+        .disabled-button {
+            @apply opacity-50 cursor-not-allowed;
+        }
+    </style>
+</head>
+<body class="overflow-hidden">
+
+    <!-- Page One -->
+    <div id="pageOne" class="page page-one p-8 md:p-12 lg:p-16 rounded-lg shadow-xl text-center">
+        <h1 class="text-5xl md:text-6xl lg:text-7xl font-extrabold text-blue-800 mb-8">
+            Page 1: Welcome!
+        </h1>
+        <p class="text-lg md:text-xl lg:text-2xl text-blue-600 mb-12 max-w-2xl mx-auto">
+            This is the first page. Scroll up (PC) or swipe up (Mobile) to go to the next page, or click the button below.
+        </p>
+        <button class="nav-button next-button" data-direction="next">
+            Next Page
+        </button>
+    </div>
+
+    <!-- Page Two -->
+    <div id="pageTwo" class="page page-two p-8 md:p-12 lg:p-16 rounded-lg shadow-xl text-center">
+        <h2 class="text-5xl md:text-6xl lg:text-7xl font-extrabold text-orange-800 mb-8">
+            Page 2: Explore More!
+        </h2>
+        <p class="text-lg md:text-xl lg:text-2xl text-orange-600 mb-12 max-w-2xl mx-auto">
+            You've reached the second page. Discover new content here. Scroll down (PC) or swipe down (Mobile) to go back.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4">
+            <button class="nav-button prev-button" data-direction="prev">
+                Previous Page
+            </button>
+            <button class="nav-button next-button" data-direction="next">
+                Next Page
+            </button>
+        </div>
+    </div>
+
+    <!-- Page Three -->
+    <div id="pageThree" class="page page-three p-8 md:p-12 lg:p-16 rounded-lg shadow-xl text-center">
+        <h2 class="text-5xl md:text-6xl lg:text-7xl font-extrabold text-emerald-800 mb-8">
+            Page 3: Deep Dive
+        </h2>
+        <p class="text-lg md:text-xl lg:text-2xl text-emerald-600 mb-12 max-w-2xl mx-auto">
+            This is the third page, packed with detailed information. Keep scrolling!
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4">
+            <button class="nav-button prev-button" data-direction="prev">
+                Previous Page
+            </button>
+            <button class="nav-button next-button" data-direction="next">
+                Next Page
+            </button>
+        </div>
+    </div>
+
+    <!-- Page Four -->
+    <div id="pageFour" class="page page-four p-8 md:p-12 lg:p-16 rounded-lg shadow-xl text-center">
+        <h2 class="text-5xl md:text-6xl lg:text-7xl font-extrabold text-purple-800 mb-8">
+            Page 4: Our Services
+        </h2>
+        <p class="text-lg md:text-xl lg:text-2xl text-purple-600 mb-12 max-w-2xl mx-auto">
+            Learn about the services we offer on this page. Almost there!
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4">
+            <button class="nav-button prev-button" data-direction="prev">
+                Previous Page
+            </button>
+            <button class="nav-button next-button" data-direction="next">
+                Next Page
+            </button>
+        </div>
+    </div>
+
+    <!-- Page Five -->
+    <div id="pageFive" class="page page-five p-8 md:p-12 lg:p-16 rounded-lg shadow-xl text-center">
+        <h2 class="text-5xl md:text-6xl lg:text-7xl font-extrabold text-pink-800 mb-8">
+            Page 5: Contact Us!
+        </h2>
+        <p class="text-lg md:text-xl lg:text-2xl text-pink-600 mb-12 max-w-2xl mx-auto">
+            You've reached the end! Feel free to reach out to us. Scroll down to go back to the beginning.
+        </p>
+        <button class="nav-button prev-button" data-direction="prev">
+            Previous Page
+        </button>
+    </div>
+
+    <script>
+        // Get all page elements
+        const pages = document.querySelectorAll('.page');
+        let currentPageIndex = 0; // Start at the first page (index 0)
+        let isAnimating = false; // Flag to prevent multiple animations at once
+
+        const swipeThreshold = 50; // Minimum vertical pixel movement for swipe/scroll detection
+        let startY = 0; // For touch events
+
+        // Function to update button states (enabled/disabled)
+        function updateButtonStates() {
+            const currentButtons = pages[currentPageIndex].querySelectorAll('.nav-button');
+            currentButtons.forEach(button => {
+                const direction = button.dataset.direction;
+                if (direction === 'prev') {
+                    if (currentPageIndex === 0) {
+                        button.classList.add('disabled-button');
+                        button.disabled = true;
+                    } else {
+                        button.classList.remove('disabled-button');
+                        button.disabled = false;
+                    }
+                } else if (direction === 'next') {
+                    if (currentPageIndex === pages.length - 1) {
+                        button.classList.add('disabled-button');
+                        button.disabled = true;
+                    } else {
+                        button.classList.remove('disabled-button');
+                        button.disabled = false;
+                    }
+                }
+            });
+        }
+
+        // Function to animate to a specific page index
+        function goToPage(newPageIndex) {
+            // Prevent animation if already animating, or if target index is invalid/current
+            if (isAnimating || newPageIndex < 0 || newPageIndex >= pages.length || newPageIndex === currentPageIndex) {
+                return;
+            }
+
+            isAnimating = true; // Set animation flag
+            const currentPage = pages[currentPageIndex];
+            const newPage = pages[newPageIndex];
+
+            // Determine animation direction
+            const direction = newPageIndex > currentPageIndex ? 'up' : 'down';
+
+            // Animate current page out
+            anime({
+                targets: currentPage,
+                translateY: direction === 'up' ? '-100%' : '100%',
+                easing: 'easeInOutQuad',
+                duration: 800,
+                complete: () => {
+                    // After current page moves out, ensure it's positioned for future transitions
+                    currentPage.style.transform = direction === 'up' ? 'translateY(-100%)' : 'translateY(100%)';
+                }
+            });
+
+            // Animate new page in
+            anime({
+                targets: newPage,
+                translateY: '0%',
+                easing: 'easeInOutQuad',
+                duration: 800,
+                complete: () => {
+                    currentPageIndex = newPageIndex; // Update current page index after animation completes
+                    isAnimating = false; // Reset animation flag
+                    updateButtonStates(); // Update button states after page change
+                }
+            });
+        }
+
+        // Event listener for navigation buttons (delegated to body for efficiency)
+        document.body.addEventListener('click', (e) => {
+            const button = e.target.closest('.nav-button');
+            if (button && !button.disabled) {
+                const direction = button.dataset.direction;
+                if (direction === 'next') {
+                    goToPage(currentPageIndex + 1);
+                } else if (direction === 'prev') {
+                    goToPage(currentPageIndex - 1);
+                }
+            }
+        });
+
+        // Touch Event Listeners for mobile devices (swipe)
+        document.body.addEventListener('touchstart', (e) => {
+            if (isAnimating) return; // Don't start new swipe if already animating
+            startY = e.touches[0].clientY;
+        });
+
+        document.body.addEventListener('touchmove', (e) => {
+            // Only prevent default if a swipe is potentially happening
+            if (!isAnimating && Math.abs(e.touches[0].clientY - startY) > 10) { // Small threshold to allow minor scroll
+                e.preventDefault();
+            }
+        }, { passive: false }); // Use passive: false to allow preventDefault
+
+        document.body.addEventListener('touchend', (e) => {
+            if (isAnimating) return;
+            const endY = e.changedTouches[0].clientY;
+            const deltaY = startY - endY; // Positive if swiping up, negative if swiping down
+
+            if (deltaY > swipeThreshold) {
+                // Swiped up
+                goToPage(currentPageIndex + 1);
+            } else if (deltaY < -swipeThreshold) {
+                // Swiped down
+                goToPage(currentPageIndex - 1);
+            }
+        });
+
+        // Mouse Wheel Event Listener for PC (scroll)
+        document.body.addEventListener('wheel', (e) => {
+            if (isAnimating) {
+                e.preventDefault(); // Prevent further scrolling if already animating
+                return;
+            }
+
+            // Prevent default scroll behavior immediately to esure smooth page transition
+            e.preventDefault();
+
+            if (e.deltaY > swipeThreshold) {
+                // Scrolled down (positive deltaY means scrolling down) -> Go to next page
+                goToPage(currentPageIndex + 1);
+            } else if (e.deltaY < -swipeThreshold) {
+                // Scrolled up (negative deltaY means scrolling up) -> Go to previous page
+                goToPage(currentPageIndex - 1);
+            }
+        }, { passive: false }); // Use passive: false to allow preventDefault for wheel event
+
+        // Handle initial load to ensure correct positioning and button states
+        window.addEventListener('load', () => {
+            pages.forEach((page, index) => {
+                if (index === 0) {
+                    page.style.transform = 'translateY(0%)'; // First page visible
+                } else {
+                    page.style.transform = 'translateY(100%)'; // All other pages start off-screen
+                }
+            });
+            updateButtonStates(); // Set initial button states
+        });
+    </script>
+</body>
+</html>
